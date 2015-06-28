@@ -8,7 +8,7 @@ Dynamic Style Sheets (DSS) is the idea of having an additional layer between a w
 This idea is somewhat similar to [VirtualCSS/MSS](https://github.com/VirtualCSS/planning) which Julian Viereck (aka [jviereck](https://github.com/jviereck)) nicely explained in his blog post about [Modularize CSS the React Way](https://medium.com/@jviereck/modularise-css-the-react-way-1e817b317b04).
 
 ## Goal
-The Goal is to have a global Layer which acts as some kind of interface between App and DOM and helps a developer to better handle his styles without thinking of adding/eliminating, minifying, et cetera. As an ideal use case I would not suggest to use Shadow CSS itself but more some library that builds upon DSS.
+The Goal is to have a global Layer which acts as some kind of interface between App and DOM and helps a developer to better handle his styles without thinking of adding/eliminating, minifying, et cetera. As an ideal use case I would not suggest to use DSS itself but more some library that builds upon DSS.
 
 ### Characteristics
 * independent *(compatibel with any framework/library)*
