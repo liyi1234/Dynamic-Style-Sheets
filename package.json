@@ -1,0 +1,29 @@
+{
+	"name": "dynamic-style-sheets",
+	"version": "0.0.1",
+	"description": "dynamic interface to interact with style sheets",
+	"main": "src/DynamicStyleSheet.js",
+	"files": [
+		"LICENSE",
+		"README.md",
+		"Research.md",
+		"src/"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/rofrischmann/Dynamic-Style-Sheets"
+	},
+	"keywords": [
+		"dss",
+		"dynamic style sheets",
+		"stylesheet",
+		"css",
+		"styling",
+		"DOM"
+	],
+	"author": "Robin Frischmann",
+	"license": "MIT",
+	"dependencies": {
+		"param-case": "1.1.1"
+	}
+}
