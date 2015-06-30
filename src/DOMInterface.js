@@ -1,3 +1,5 @@
+import * as Util from './util/Util';
+
 let globalSheets = new Map();
 let appliedSelectors = new Map();
 let styleTags = new Map();
@@ -47,19 +49,22 @@ export default {
 		/**
 		 * Applies a stylesheet to the document
 		 * @param {String} id - stylesheet id that gets applied
+		 * @param {Boolean} active - activated state of stylesheet
 		 */
-		apply(id, dirty) {
+		apply(id, active, dirty) {
 			let style = styleTags.get(id);
 			let stylesheet = globalSheets.get(id);
 			let applied = appliedSelectors.get(id);
 
-			if (!stylesheet.active) {
+			if (!active) {
 				if (dirty) {
 					style = Util.applyDirty(style, stylesheet, applied);
 				} else {
-					style = Util.apply(style, stylesheet.selectors, applied);
+					style = Util.apply(style, stylesheet, applied);
 				}
 				head.appendChild(style);
+			} else {
+				throw "StyleSheet has already been applied. Use the .update() function instead or .detach() first";
 			}
 		},
 
@@ -72,5 +77,13 @@ export default {
 
 			head.removeChild(document.getElementById(idPrefix + id));
 			applied.clear();
+		},
+
+
+		/**
+		 * Returns stylesheet count
+		 */
+		getStyleSheetCount() {
+			return globalSheets.size;
 		}
 }

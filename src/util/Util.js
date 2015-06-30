@@ -1,4 +1,4 @@
-import paramCase from 'paramCase';
+import paramCase from 'param-case';
 
 export function toParamCase(string) {
 	return paramCase(string);
@@ -34,10 +34,10 @@ export function extendMap(base, extend, overwrite) {
  * @param {Set} appliedSelectors - a set that memorizes applied selectors
  */
 export function apply(DOMElement, selectors, appliedSelectors) {
-	for (var [property, value] of selectors) {
-		appliedSelectors.set(property);
+	for (let [property, styles] of selectors) {
+		appliedSelectors.add(property);
 
-		let CSS = property + '{' + value + '}';
+		let CSS = property + '{' + styles + '}';
 		let node = document.createTextNode(CSS);
 		DOMElement.appendChild(node);
 	}
@@ -49,12 +49,16 @@ export function apply(DOMElement, selectors, appliedSelectors) {
  *	Applies selectors to a style DOMElement (dirtymode)
  * NOTE: Creates only one text node with a CSS String within
  * @param {Object} DOMElement - Style tag that gets all the selectors applied
- * @param {Map} stylesheet - stylesheet thats selectors get applied
+ * @param {Map} selectors - selectors that get applied
  * @param {Set} appliedSelectors - a set that memorizes applied selectors
  */
-export function applyDirty(DOMElement, stylesheet, appliedSelectors) {
-	let CSS = stylesheet.toCSS(stylesheet.selectors);
+export function applyDirty(DOMElement, selectors, appliedSelectors) {
+	let CSS = '';
 
+	for (let [property, styles] in selectors) {
+		appliedSelectors.add(property);
+		CSS += property + '{' + styles + '}';
+	}
 	let node = document.createTextNode(CSS);
 	DOMElement.appendChild(node);
 

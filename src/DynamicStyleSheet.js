@@ -8,7 +8,7 @@ import * as Util from './util/Util';
  * @param {String} id - Id which refers your stylesheet within your document
  */
 export default class DynamicStyleSheet {
-	constructor(selectors, id) {
+	constructor(selectors, id = DOMInterface.getStyleSheetCount()) {
 		this.id = id;
 		this.selectors = selectors;
 		this.active = false;
@@ -23,10 +23,13 @@ export default class DynamicStyleSheet {
 	 * @param {Boolean} overwrite - overwrite existing properties
 	 */
 	add(selector, styles, overwrite) {
-		let base = this.selectors.get(selector);
-
-		let extended = Util.extendMap(base, styles, overwrite);
-		this.selectors.set(selector, extended);
+		if (this.selectors.has(selector)) {
+			let base = this.selectors.get(selector);
+			let extended = Util.extendMap(base, styles, overwrite);
+			this.selectors.set(selector, extended);
+		} else {
+			this.selectors.set(selector, styles);
+		}
 	}
 
 	/**
@@ -75,7 +78,7 @@ export default class DynamicStyleSheet {
 	apply(dirty) {
 		this.update();
 
-		DOMInterface.apply(this.id, dirty);
+		DOMInterface.apply(this.id, this.active, dirty);
 		this.active = true;
 	}
 
@@ -101,7 +104,7 @@ export default class DynamicStyleSheet {
 	 */
 	compile() {
 		let compiledSheet = new Map();
-		for (let [selector, styles] of sheet) {
+		for (let [selector, styles] of this.selectors) {
 			let selectorStyles = '';
 
 			for (let [property, value] of styles) {
@@ -115,6 +118,7 @@ export default class DynamicStyleSheet {
 
 	/**
 	 *	Returns a concated valid CSS String
+	 * @param {Map} compiledSheet - a compiled StyleSheet with selectors and their styles
 	 */
 	toCSS(compiledSheet = this.compile()) {
 
