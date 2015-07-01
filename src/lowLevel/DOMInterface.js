@@ -1,11 +1,10 @@
-import * as Util from './util/Util';
+import * as Util from './Util';
 
 let globalSheets = new Map();
-let appliedSelectors = new Map();
 let styleTags = new Map();
 
-let idPrefix = 'DynamicStyleSheet-';
 let head = document.head || document.getElementsByTagName('head')[0];
+let idPrefix = 'DynamicStyleSheet-';
 
 export default {
 	/**
@@ -13,37 +12,33 @@ export default {
 	 * @param {DynamicStyleSheet} stylesheet - dynamic style sheet that gets registered to your DOM
 	 */
 	register(stylesheet) {
-			let id = stylesheet.id;
-			let applied = new Set();
+			if (!stylesheet.registered) {
+				let id = stylesheet.id;
+				globalSheets.set(id, stylesheet);
 
-			globalSheets.set(id, stylesheet.compile());
-			appliedSelectors.set(id, applied);
-
-			/*
-			 * Creates a new style tag
-			 */
-			if (!stylesheet.active) {
 				let style = document.createElement('style');
 				style.type = 'text/css';
 				style.id = idPrefix + id;
 				styleTags.set(id, style);
 			}
 		},
+
 		/**
 		 * Updates the local stylesheet information
 		 * @param {DynamicStyleSheet} stylesheet - stylesheet you want to update
 		 */
 		update(stylesheet) {
-			//TODO: Diff changes and only apply, detach those
-
-			/*globalSheets.set(stylesheet.id, stylesheet.compile());
-			let selector;
-			let applied = appliedSelectors.get(stylesheet.id);
-			for (selector of applied.keys()) {
-				if (!stylesheet.selectors.has(selector)) {
-					applied.delete(selector);
-				}
-			}*/
+			if (stylesheet.active) {
+				let global = gobalSheets.get(stylesheet.id);
+				
+				let changes = Util.diffMap(global.selectors, stylesheet.selectors);
+				
+				let DOMElement = styleTags.get(id);
+				let sheet = DOMElement.sheet ? DOMElement.sheet : DOMElement.styleSheet;
+				Util.applyChanges(sheet, global.selectors, changes, selector);
+			} else {
+				throw "You can't update an unapplied stylesheet. Apply first using .apply()";
+			}
 		},
 
 		/**
@@ -51,17 +46,12 @@ export default {
 		 * @param {String} id - stylesheet id that gets applied
 		 * @param {Boolean} active - activated state of stylesheet
 		 */
-		apply(id, active, dirty) {
+		apply(id, active) {
 			let style = styleTags.get(id);
 			let stylesheet = globalSheets.get(id);
-			let applied = appliedSelectors.get(id);
 
 			if (!active) {
-				if (dirty) {
-					style = Util.applyDirty(style, stylesheet, applied);
-				} else {
-					style = Util.apply(style, stylesheet, applied);
-				}
+				style = Util.apply(style, stylesheet.compile());
 				head.appendChild(style);
 			} else {
 				throw "StyleSheet has already been applied. Use the .update() function instead or .detach() first";
@@ -73,12 +63,8 @@ export default {
 		 * @param {String} id - stylesheet id that gets detached
 		 */
 		detach(id) {
-			let applied = appliedSelectors.get(id);
-
-			head.removeChild(document.getElementById(idPrefix + id));
-			applied.clear();
+			head.removeChild(document.getElementById(Util.idPrefix + id));
 		},
-
 
 		/**
 		 * Returns stylesheet count
