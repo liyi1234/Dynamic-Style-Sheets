@@ -1,19 +1,19 @@
-import DOMInterface from './DOMInterface';
-import * as Util from './util/Util';
+import DOMInterface from '../lowLevel/DOMInterface';
+import * as Util from '../lowLevel/Util';
 
 /**
- *	Creates a new DynamicStyleSheet
- * NOTE: Also registers automatically to the DOMInterface
- * @param {Map} selectors - A map of selectors pointing to a map of style properties and values
- * @param {String} id - Id which refers your stylesheet within your document
+ *	DynamicStyleSheet is a class to handle StyleSheets
  */
 export default class DynamicStyleSheet {
+	/*
+	 * @param {Map} selectors - A map of selectors pointing to a map of style properties and values
+	 * @param {String} id - Id which refers your stylesheet within your document
+	 */
 	constructor(selectors, id = DOMInterface.getStyleSheetCount()) {
 		this.id = id;
 		this.selectors = selectors;
 		this.active = false;
-
-		DOMInterface.register(this);
+		this.registered = false;
 	}
 
 	/**
@@ -72,13 +72,11 @@ export default class DynamicStyleSheet {
 	/**
 	 *	Hands your sheet to the DOMInterface which applies the styles to your document
 	 * NOTE: Also automatically updates the sheet to DOMInterface
-	 * WARNING: Only apply dirty if you do not want to edit your stylesheet afterwards
-	 * @param {Boolean} dirty - applying dirty is much more performant but complicates editing later 
 	 */
-	apply(dirty) {
-		this.update();
+	apply() {
+		DOMInterface.register(this);
 
-		DOMInterface.apply(this.id, this.active, dirty);
+		DOMInterface.apply(this.id, this.active);
 		this.active = true;
 	}
 
@@ -103,17 +101,21 @@ export default class DynamicStyleSheet {
 	 *	Returns a map with selectors and a valid CSS String
 	 */
 	compile() {
-		let compiledSheet = new Map();
-		for (let [selector, styles] of this.selectors) {
-			let selectorStyles = '';
-
-			for (let [property, value] of styles) {
-				selectorStyles && (selectorStyles += ';');
-				selectorStyles += Util.toParamCase(property) + ':' + value;
+			let compiledSheet = new Map();
+			for (let [selector, styles] of this.selectors) {
+				let selectorStyles = Util.cssifyMap(styles);
+				compiledSheet.set(selector, selectorStyles);
 			}
-			compiledSheet.set(selector, selectorStyles);
+			return compiledSheet;
 		}
-		return compiledSheet;
+		/**
+		 * Runs a processor to modify your stylesheet
+		 * {Object} processor - a processor with a valid process() function
+		 */
+	process(processor) {
+		if (processor.hasOwnProperty('process') && processor.process instanceof Function) {
+			processor.process(this);
+		}
 	}
 
 	/**
