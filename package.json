@@ -9,6 +9,9 @@
     "Research.md",
     "src/"
   ],
+  "scripts": {
+    "test": "browserify test/performance/tests.js -o test/performance/tests.transpiled.js | phantomic test/performance/tests.transpiled.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/dynamicstylesheets/Dynamic-Style-Sheets"
@@ -31,5 +34,12 @@
     "transform": [
       "babelify"
     ]
+  },
+  "devDependencies": {
+    "babel": "^5.6.14",
+    "babelify": "^6.1.2",
+    "browserify": "^10.2.4",
+    "phantomic": "^1.1.2",
+    "phantomjs": "^1.9.17"
   }
 }
