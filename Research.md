@@ -16,6 +16,8 @@ Feel free to change the [config.js](test/performance/config.js) and [cases.js](t
 
 - [ ] applyStyleProperty (`style.setProperty(PROP, VALUE)` vs. `style[PROP] = VALUE`)
 - [ ] Object vs. ES6 Map
+    
+
 -----
 
 ### Adding Styles with Javascript
@@ -37,11 +39,13 @@ style.appendChild(document.createTextNode(CSS));
 //applied it to your head which now start effecting your DOM
 document.head.appendChild(style)
 ```
+    
 ------- 
 ### Changing a CSS rule
 Since your browser most likely needs to rematch **ALL** selectors if you even only change one of those this first sounds not effective at all.     
 But consider you're about the change a rule which affects e.g. 1000 list elements. It's far more performant to just manipulate that given CSS Rule within your `<style></style>`-tag than by adding/removing/editing the className of every single list elements since each is a adequate DOM manipulation which are known to be expensive in general.
-
+     
+     
 -------
 ### Applying Changes
 It seems to be a lot easier to just do some **String-Replacement**, but as we know that's kind of expensive at any time. Wheather or not a complicated **Map-Diffing** could push performance while applying changes should be found out.
@@ -59,6 +63,7 @@ This is probably more relevant for the user itself but I will still add it here 
 * Avoid using the **universal** `*` selector
 
 
+#Experimental
 ## Keeping a minimum selector count
 **Assumption:** More selectors = less performance
     
