@@ -1,5 +1,5 @@
-import DOMInterface from '../interface/DOMInterface';
-import * as Util from '../interface/Util';
+import DOMInterface from './interface/DOMInterface';
+import * as Util from './interface/Util';
 
 /**
  * DynamicStyleSheet is a class to handle and modify StyleSheets
@@ -22,8 +22,8 @@ export default class Sheet {
 	 * @param {Map} rules - key value map of style properties and values
 	 * @param {Boolean} overwrite - overwrite existing properties
 	 */
-	add(selector, rules, overwrite) {
-		if(this.selectors.has(selector)) {
+	add(selector, rules, overwrite = true) {
+		if (this.selectors.has(selector)) {
 			let base = this.selectors.get(selector);
 			let extended = Util.extendMap(base, rules, overwrite);
 			this.selectors.set(selector, extended);
@@ -74,17 +74,18 @@ export default class Sheet {
 	 * @param {Array} properties - set of properties that get removed
 	 */
 	removeRule(selector, properties) {
-		let i;
-		let length = properties.length;
 		let base = this.selectors.get(selector);
 
-		if(!properties instanceof Array) {
+		if (properties instanceof Array == false) {
 			properties = [properties];
 		}
-		for(i = 0; i < length; ++i) {
+		
+		let i;
+		let length = properties.length;
+		for (i = 0; i < length; ++i) {
 			let current = properties[i];
 
-			if(base.has(current)) {
+			if (base.has(current)) {
 				base.delete(current);
 			}
 		}
@@ -104,7 +105,7 @@ export default class Sheet {
 	apply() {
 		DOMInterface.register(this);
 
-		DOMInterface.apply(this.id, this.active);
+		DOMInterface.apply(this);
 		this.active = true;
 	}
 
@@ -121,10 +122,18 @@ export default class Sheet {
 	 * NOTE: Helps to improve the performance
 	 */
 	detach() {
-		DOMInterface.detach(this.id);
+		DOMInterface.detach(this);
 		this.active = false;
 	}
 
+	enable(){
+		DOMInterface.enable(this);
+	}
+	
+	disable(){
+		DOMInterface.disable(this);
+	}
+	
 	/**
 	 * Runs a processor to modify your stylesheet
 	 * {Object} processor - a processor with a valid process() function
@@ -132,8 +141,8 @@ export default class Sheet {
 	 */
 	process(processor, args = []) {
 		args.unshift(this);
-		if(processor.hasOwnProperty('process') && processor.process instanceof Function) {
-			processor.process(args);
+		if (processor.hasOwnProperty('process') && processor.process instanceof Function) {
+			processor.process(...args);
 		}
 	}
 
@@ -144,10 +153,10 @@ export default class Sheet {
 	compile(selector) {
 		let compiledSheet = new Map();
 
-		if(selector) {
+		if (selector) {
 			compiledSheet.set(selector, Util.cssifyMap(this.selectors.get(selector)));
 		} else {
-			for(let [sel, rules] of this.selectors) {
+			for (let [sel, rules] of this.selectors) {
 				compiledSheet.set(sel, Util.cssifyMap(rules));
 			}
 		}
@@ -161,13 +170,21 @@ export default class Sheet {
 	toCSS(selector) {
 		let CSS = '';
 
-		if(selector) {
+		if (selector) {
 			CSS = selector + '{' + Util.cssifyMap(this.selectors.get(selector)) + '}';
 		} else {
-			for(let [sel, rules] of this.selectors) {
+			for (let [sel, rules] of this.selectors) {
 				CSS += sel + '{' + Util.cssifyMap(rules) + '}';
 			}
 		}
 		return CSS;
+	}
+
+	isActive() {
+		return this.active;
+	}
+
+	isRegistered() {
+		return this.registered;
 	}
 }
