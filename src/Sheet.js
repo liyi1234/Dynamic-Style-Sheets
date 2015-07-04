@@ -1,4 +1,4 @@
-import DOMInterface from './interface/DOMInterface';
+import Interface from './interface/Interface';
 import * as Util from './interface/Util';
 
 /**
@@ -9,7 +9,7 @@ export default class Sheet {
 	 * @param {Map} selectors - A map of selectors pointing to a map of style properties and values
 	 * @param {String} id - Id which refers your stylesheet within your document
 	 */
-	constructor(selectors, id = DOMInterface.getStyleSheetCount()) {
+	constructor(selectors, id = Interface.getStyleSheetCount()) {
 		this.id = id;
 		this.selectors = selectors;
 		this.active = false;
@@ -79,7 +79,7 @@ export default class Sheet {
 		if (properties instanceof Array == false) {
 			properties = [properties];
 		}
-		
+
 		let i;
 		let length = properties.length;
 		for (i = 0; i < length; ++i) {
@@ -99,21 +99,21 @@ export default class Sheet {
 	}
 
 	/**
-	 * Hands your sheet to the DOMInterface which applies the styles to your document
-	 * NOTE: Also automatically updates the sheet to DOMInterface
+	 * Hands your sheet to the Interface which applies the styles to your document
+	 * NOTE: Also automatically updates the sheet to Interface
 	 */
 	apply() {
-		DOMInterface.register(this);
+		Interface.register(this);
 
-		DOMInterface.apply(this);
+		Interface.apply(this);
 		this.active = true;
 	}
 
 	/**
-	 * Updates your sheet reference within DOMInterface
+	 * Updates your sheet reference within Interface
 	 */
 	update() {
-		DOMInterface.update(this);
+		Interface.update(this);
 	}
 
 	/**
@@ -122,24 +122,24 @@ export default class Sheet {
 	 * NOTE: Helps to improve the performance
 	 */
 	detach() {
-		DOMInterface.detach(this);
+		Interface.detach(this);
 		this.active = false;
 	}
 
-	enable(){
-		DOMInterface.enable(this);
+	enable() {
+		Interface.enable(this);
 	}
-	
-	disable(){
-		DOMInterface.disable(this);
+
+	disable() {
+		Interface.disable(this);
 	}
-	
+
 	/**
 	 * Runs a processor to modify your stylesheet
 	 * {Object} processor - a processor with a valid process() function
 	 * {Multiple} args - any arguments you need to pass to a processor
 	 */
-	process(processor, args = []) {
+	process(processor, ...args) {
 		args.unshift(this);
 		if (processor.hasOwnProperty('process') && processor.process instanceof Function) {
 			processor.process(...args);

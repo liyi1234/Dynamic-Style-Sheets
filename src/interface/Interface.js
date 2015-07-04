@@ -3,7 +3,7 @@ import * as Util from './Util';
 let globalSheets = new Map();
 
 let head = document.head || document.getElementsByTagName('head')[0];
-let idPrefix = 'DynamicStyleSheet-';
+let idPrefix = 'dynamic-style-sheet-';
 
 export default {
 	/**

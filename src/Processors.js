@@ -1,5 +1,7 @@
 import Prefixer from 'dss-prefixer';
+import Flexbox from 'dss-flexbox';
 
 export default {
-	Prefixer: Prefixer
+	Prefixer: Prefixer,
+	Flexbox: Flexbox
 }
