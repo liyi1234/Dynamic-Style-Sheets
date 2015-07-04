@@ -126,20 +126,9 @@ export default class Sheet {
 	}
 
 	/**
-	 * Returns a map with selectors and a valid CSS String
+	 * Runs a processor to modify your stylesheet
+	 * {Object} processor - a processor with a valid process() function
 	 */
-	compile() {
-			let compiledSheet = new Map();
-			for(let [selector, rules] of this.selectors) {
-				let CSSRules = Util.cssifyMap(rules);
-				compiledSheet.set(selector, CSSRules);
-			}
-			return compiledSheet;
-		}
-		/**
-		 * Runs a processor to modify your stylesheet
-		 * {Object} processor - a processor with a valid process() function
-		 */
 	process(processor) {
 		if(processor.hasOwnProperty('process') && processor.process instanceof Function) {
 			processor.process(this);
@@ -147,15 +136,35 @@ export default class Sheet {
 	}
 
 	/**
-	 * Returns a concated valid CSS String
-	 * @param {Map} compiledSheet - a compiled StyleSheet with selectors and their styles
+	 * Returns a map with selectors and a valid CSS String
+	 * @param {Map} selector - a specific selector to be compiled
 	 */
-	toCSS(compiledSheet = this.compile()) {
+	compile(selector) {
+		let compiledSheet = new Map();
 
+		if(selector) {
+			compiledSheet.set(selector, Util.cssifyMap(this.selectors.get(selector)));
+		} else {
+			for(let [sel, rules] of this.selectors) {
+				compiledSheet.set(sel, Util.cssifyMap(rules));
+			}
+		}
+		return compiledSheet;
+	}
+
+	/**
+	 * Returns a concated valid CSS String
+	 * @param {Map} selector - a special selector to cssify
+	 */
+	toCSS(selector) {
 		let CSS = '';
 
-		for(let [selector, rules] of compiledSheet) {
-			CSS += selector + '{' + rules + '}';
+		if(selector) {
+			CSS = selector + '{' + Util.cssifyMap(this.selectors.get(selector)) + '}';
+		} else {
+			for(let [sel, rules] of this.selectors) {
+				CSS += sel + '{' + Util.cssifyMap(rules) + '}';
+			}
 		}
 		return CSS;
 	}
