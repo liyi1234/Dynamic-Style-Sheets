@@ -128,10 +128,12 @@ export default class Sheet {
 	/**
 	 * Runs a processor to modify your stylesheet
 	 * {Object} processor - a processor with a valid process() function
+	 * {Multiple} args - any arguments you need to pass to a processor
 	 */
-	process(processor) {
+	process(processor, args = []) {
+		args.unshift(this);
 		if(processor.hasOwnProperty('process') && processor.process instanceof Function) {
-			processor.process(this);
+			processor.process(args);
 		}
 	}
 
