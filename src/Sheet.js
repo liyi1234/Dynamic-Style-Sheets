@@ -6,7 +6,7 @@ import * as Util from './interface/Util';
  */
 export default class Sheet {
 	/*
-	 * @param {Map} selectors - A map of selectors pointing to a map of style properties and values
+	 * @param {Object} selectors - A map of selectors pointing to a map of style properties and values
 	 * @param {String} id - Id which refers your stylesheet within your document
 	 */
 	constructor(selectors, id = Interface.getStyleSheetCount()) {
@@ -19,23 +19,23 @@ export default class Sheet {
 	/**
 	 * Adds a map of style properties and values to a selector
 	 * @param {String} selector - selector that gets styles added
-	 * @param {Map} rules - key value map of style properties and values
+	 * @param {Object} rules - key value map of style properties and values
 	 * @param {Boolean} overwrite - overwrite existing properties
 	 */
 	add(selector, rules, overwrite = true) {
-		if (this.selectors.has(selector)) {
-			let base = this.selectors.get(selector);
-			let extended = Util.extendMap(base, rules, overwrite);
-			this.selectors.set(selector, extended);
+		if (this.selectors.hasOwnProperty(selector)) {
+			let base = this.selectors[selector];
+			let extended = Util.extendObject(base, rules, overwrite);
+			this.selectors[selector] = extended;
 		} else {
-			this.selectors.set(selector, rules);
+			this.selectors[selector] = rules;
 		}
 	}
 
 	/**
 	 * Modifies selectors CSS style rules
 	 * @param {String} selector - selector that gets styles added
-	 * @param {Map} rules - key value map of style properties and values
+	 * @param {Object} rules - key value map of style properties and values
 	 */
 	modify(selector, rules) {
 		this.add(selector, rules, true);
@@ -48,16 +48,16 @@ export default class Sheet {
 	 * @param {String} value - New value for property
 	 */
 	modifyRule(selector, property, value) {
-		this.selectors.get(selector).set(property, value);
+		this.selectors[selector][property] = value;
 	}
 
 	/**
 	 *	Replaces a selectosr CSS rules
 	 * @param {String} selector - selector that gets styles added
-	 * @param {Map} rules - key value map of style properties and values
+	 * @param {Object} rules - key value map of style properties and values
 	 */
 	replace(selector, rules) {
-		this.selectors.set(selector, rules);
+		this.selectors[selector] = rules;
 	}
 
 	/**
@@ -65,7 +65,7 @@ export default class Sheet {
 	 * @param {String} selector - selector that gets deleted
 	 */
 	remove(selector) {
-		this.selectors.delete(selector);
+		delete this.selectors[selector];
 	}
 
 	/**
@@ -74,7 +74,7 @@ export default class Sheet {
 	 * @param {Array} properties - set of properties that get removed
 	 */
 	removeRule(selector, properties) {
-		let base = this.selectors.get(selector);
+		let base = this.selectors[selector];
 
 		if (properties instanceof Array == false) {
 			properties = [properties];
@@ -85,8 +85,8 @@ export default class Sheet {
 		for (i = 0; i < length; ++i) {
 			let current = properties[i];
 
-			if (base.has(current)) {
-				base.delete(current);
+			if (base.hasOwnProperty(current)) {
+				delete base[current];
 			}
 		}
 	}
@@ -95,7 +95,7 @@ export default class Sheet {
 	 * Removes all selectors
 	 */
 	removeAll() {
-		this.selectors.clear();
+		this.selectors = {};
 	}
 
 	/**
@@ -140,7 +140,7 @@ export default class Sheet {
 	 * {Multiple} args - any arguments you need to pass to a processor
 	 */
 	process(processor, ...args) {
-		args.unshift(this);
+		args.unshift(this.selectors);
 		if (processor.hasOwnProperty('process') && processor.process instanceof Function) {
 			processor.process(...args);
 		}
@@ -148,16 +148,17 @@ export default class Sheet {
 
 	/**
 	 * Returns a map with selectors and a valid CSS String
-	 * @param {Map} selector - a specific selector to be compiled
+	 * @param {Object} selector - a specific selector to be compiled
 	 */
 	compile(selector) {
-		let compiledSheet = new Map();
+		let compiledSheet = {};
 
 		if (selector) {
-			compiledSheet.set(selector, Util.cssifyMap(this.selectors.get(selector)));
+			compiledSheet[selector] = Util.cssifyObject(this.selectors[selector]);
 		} else {
-			for (let [sel, rules] of this.selectors) {
-				compiledSheet.set(sel, Util.cssifyMap(rules));
+			let sel;
+			for (sel in this.selectors) {
+				compiledSheet[sel] = Util.cssifyObject(this.selectors[sel]);
 			}
 		}
 		return compiledSheet;
@@ -165,16 +166,17 @@ export default class Sheet {
 
 	/**
 	 * Returns a concated valid CSS String
-	 * @param {Map} selector - a special selector to cssify
+	 * @param {Object} selector - a special selector to cssify
 	 */
 	toCSS(selector) {
 		let CSS = '';
 
 		if (selector) {
-			CSS = selector + '{' + Util.cssifyMap(this.selectors.get(selector)) + '}';
+			CSS = selector + '{' + Util.cssifyObject(this.selectors[selector]) + '}';
 		} else {
-			for (let [sel, rules] of this.selectors) {
-				CSS += sel + '{' + Util.cssifyMap(rules) + '}';
+			let sel;
+			for (sel in this.selectors) {
+				CSS += sel + '{' + Util.cssifyObject(this.selectors[sel]) + '}';
 			}
 		}
 		return CSS;

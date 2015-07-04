@@ -1,6 +1,6 @@
 import * as Util from './Util';
 
-let globalSheets = new Map();
+let appliedSelectors = new Map();
 
 let head = document.head || document.getElementsByTagName('head')[0];
 let idPrefix = 'dynamic-style-sheet-';
@@ -15,7 +15,7 @@ export default {
 				let id = stylesheet.id;
 
 
-				globalSheets.set(id, Util.cloneMap(stylesheet.selectors));
+				appliedSelectors.set(id, Util.cloneObject(stylesheet.selectors));
 
 				let style = document.createElement('style');
 				style.type = 'text/css';
@@ -32,10 +32,10 @@ export default {
 		 */
 		update(stylesheet) {
 			if (stylesheet.isActive()) {
-				let oldSheet = globalSheets.get(stylesheet.id);
+				let oldSelectors = appliedSelectors.get(stylesheet.id);
 
-				let changes = Util.diffMap(oldSheet, stylesheet.selectors);
-				
+				let changes = Util.diffObject(oldSelectors, stylesheet.selectors);
+
 				this.applyChangesToDOM(stylesheet, changes);
 			} else {
 				throw "You can't update an unapplied stylesheet. Apply first using .apply()";
@@ -62,13 +62,14 @@ export default {
 		/**
 		 * Applies StyleSheet selectors to the DOM
 		 * @param {Object} DOMElement - Style tag that gets all the selectors applied
-		 * @param {Map} selectors - selectors that get applied
+		 * @param {Object} selectors - selectors that get applied
 		 */
 		applyToDOM(DOMElement, selectors) {
 			let CSS = '';
+			let property;
 
-			for (let [property, rules] of selectors) {
-				CSS += property + '{' + rules + '}';
+			for (property in selectors) {
+				CSS += property + '{' + selectors[property] + '}';
 			}
 			let node = document.createTextNode(CSS);
 			DOMElement.appendChild(node);
@@ -79,7 +80,7 @@ export default {
 		/**
 		 * Applies StyleSheet changes to the DOM
 		 * @param {Sheet} sheet - Sheet that gets the changes applied
-		 * @param {changes} Map - Changes map as output of StyleSheet diffing
+		 * @param {Map} changes - Changes map as output of StyleSheet diffing
 		 */
 		applyChangesToDOM(stylesheet, changes, index) {
 			let sheet = stylesheet.sheet;
@@ -100,7 +101,7 @@ export default {
 						this.applyChangesToDOM(stylesheet, propertyChanges, CSSRuleIndex);
 					}
 				} else {
-					//propertie
+					//properties
 					if (state == Util.Diff.ADDED || state == Util.Diff.CHANGED) {
 						sheet.cssRules[index].style.setProperty(Util.toParamCase(property), state);
 					} else if (state == Util.Diff.REMOVED) {
@@ -137,6 +138,6 @@ export default {
 		 * Returns stylesheet count
 		 */
 		getStyleSheetCount() {
-			return globalSheets.size;
+			return appliedSelectors.size;
 		}
 }
