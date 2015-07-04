@@ -1,5 +1,5 @@
 import paramCase from 'param-case';
-
+import objectAssign from 'object-assign'
 export let Diff = {
 	CHANGED: 'change',
 	ADDED: 'add',
@@ -16,71 +16,70 @@ export function toParamCase(string) {
 
 /**
  * Mixes two maps and optionally overwrites existing values
- * @param {Map} base - A base map which might get overwritten
- * @param {Map} extend - A map which will extend the base map
+ * @param {Object} base - A base map which might get overwritten
+ * @param {Object} extend - A map which will extend the base map
  * @param {Boolean} overwrite - overwrite existing properties
  */
-export function extendMap(base, extend, overwrite) {
-	let extended = base;
+export function extendObject(base, extend, overwrite = true) {
+	let extended;
 	if (overwrite) {
-		for (var [property, value] of extend) {
-			extended.set(property, value);
-		}
+		extended = objectAssign({}, base, extend);
 	} else {
-		for (var [property, value] of extend) {
-			if (!base.has(property)) {
-				extended.set(property, value);
-			}
-		}
+		extended = objectAssign({}, extend, base);
 	}
 	return extended;
 }
 
 /**
- * Clones a Map
+ * Clones a Object
  * NOTE: This is much like Immutable.js behavoir
- * @param {Map} map - Map that get's cloned
+ * @param {Object} object - Object that get's cloned
  */
-export function cloneMap(map, deep = true) {
-	let clone = new Map();
-	for (var [property, value] of map) {
-		if (deep && value instanceof Map) {
-			clone.set(property, this.cloneMap(value, true));
+export function cloneObject(obj, deep = true) {
+	let clone = {};
+	let i;
+
+	for (i in obj) {
+		let temp = obj[i];
+		if (temp instanceof Object) {
+			clone[i] = this.cloneObject(temp, true);
 		} else {
-			clone.set(property, value);
+			clone[i] = temp;
 		}
 	}
-	return clone;
 }
 
 /**
- * Returns a single CSS rule string out of Map pairs
- * @param {Map} map - Map with CSS rules
+ * Returns a single CSS rule string out of Object pairs
+ * @param {Object} map - Object with CSS rules
  */
-export function cssifyMap(map) {
+export function cssifyObject(obj) {
 	let rules = '';
-	for (let [property, value] of map) {
-		rules += this.toParamCase(property) + ':' + value + ';';
+	let property;
+	for (property in obj) {
+		rules += this.toParamCase(property) + ':' + obj[property] + ';';
 	}
 	return rules;
 }
 
 
 /**
- * Diffs a map, applies changes and returns a Map of changes
- * @param {Map} base - basic map that gets overwritten
- * @param {Map} diff - map with new data
+ * Diffs an object, applies changes and returns a Object of changes
+ * @param {Object} base - basic map that gets overwritten
+ * @param {Object} diff - map with new data
  */
-export function diffMap(base, diff) {
+export function diffObject(base, diff) {
 	let changes = new Map();
-	for (let [property, value] of base) {
+	let property;
+	
+	for (property in base) {
 		//if still existing
-		if (diff.has(property)) {
-			let newValue = diff.get(property);
+		if (diff.hasOwnProperty(property)) {
+			let newValue = diff[property];
 			//if value changed
-			if (newValue instanceof Map) {
+			if (newValue instanceof Object) {
 
-				let change = this.diffMap(value, newValue);
+				let change = this.diffObject(base[property], newValue);
 
 				if (change.size > 0) {
 					changes.set(property, this.Diff.CHANGED);
@@ -88,21 +87,23 @@ export function diffMap(base, diff) {
 				}
 			} else {
 				if (newValue !== value) {
-					base.set(property, newValue);
+					base[property] = newValue;
 					changes.set(property, this.Diff.CHANGED);
 				}
 			}
 		} else {
-			base.delete(property);
+			delete base[property];
 			changes.set(property, this.Diff.REMOVED);
 		}
 	}
-	for (let [property, value] of diff) {
-		if (!base.has(property)) {
-			if (value instanceof Map) {
-				base.set(property, this.cloneMap(value));
+	for (property in diff) {
+		if (!base.hasOwnProperty(property)) {
+			let temp = diff[property];
+
+			if (temp instanceof Object) {
+				base[property] = this.cloneObject(temp);
 			} else {
-				base.set(property, value);
+				base[property] = temp;
 			}
 			changes.set(property, this.Diff.ADDED);
 		}
