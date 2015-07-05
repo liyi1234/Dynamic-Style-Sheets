@@ -1,26 +1,31 @@
 import Interface from './interface/Interface';
 import * as Util from './interface/Util';
 
+let counter = 0;
 /**
  * DynamicStyleSheet is a class to handle and modify StyleSheets
  */
 export default class Sheet {
 	/*
 	 * @param {Object} selectors - A map of selectors pointing to a map of style properties and values
-	 * @param {String} id - Id which refers your stylesheet within your document
+	 * @param {string} media - specifies a special media query
+	 * @param {string} id - Id which refers your stylesheet within your document
 	 */
-	constructor(selectors, id = Interface.getStyleSheetCount()) {
+	constructor(selectors, media = '', id = counter) {
 		this.id = id;
 		this.selectors = selectors;
+		this.media = media;
+
 		this.active = false;
 		this.registered = false;
+		++counter;
 	}
 
 	/**
 	 * Adds a map of style properties and values to a selector
-	 * @param {String} selector - selector that gets styles added
+	 * @param {string} selector - selector that gets styles added
 	 * @param {Object} rules - key value map of style properties and values
-	 * @param {Boolean} overwrite - overwrite existing properties
+	 * @param {boolean} overwrite - overwrite existing properties
 	 */
 	add(selector, rules, overwrite = true) {
 		if (this.selectors.hasOwnProperty(selector)) {
@@ -34,7 +39,7 @@ export default class Sheet {
 
 	/**
 	 * Modifies selectors CSS style rules
-	 * @param {String} selector - selector that gets styles added
+	 * @param {string} selector - selector that gets styles added
 	 * @param {Object} rules - key value map of style properties and values
 	 */
 	modify(selector, rules) {
@@ -43,9 +48,9 @@ export default class Sheet {
 
 	/**
 	 * Modifies a specific property
-	 * @param {String} selector - selector that gets styles added
-	 * @param {String} property - Property which will be modified
-	 * @param {String} value - New value for property
+	 * @param {string} selector - selector that gets styles added
+	 * @param {string} property - Property which will be modified
+	 * @param {string} value - New value for property
 	 */
 	modifyRule(selector, property, value) {
 		this.selectors[selector][property] = value;
@@ -53,7 +58,7 @@ export default class Sheet {
 
 	/**
 	 *	Replaces a selectosr CSS rules
-	 * @param {String} selector - selector that gets styles added
+	 * @param {string} selector - selector that gets styles added
 	 * @param {Object} rules - key value map of style properties and values
 	 */
 	replace(selector, rules) {
@@ -62,7 +67,7 @@ export default class Sheet {
 
 	/**
 	 * Removes a selector
-	 * @param {String} selector - selector that gets deleted
+	 * @param {string} selector - selector that gets deleted
 	 */
 	remove(selector) {
 		delete this.selectors[selector];
@@ -70,8 +75,8 @@ export default class Sheet {
 
 	/**
 	 * Removes a set of properties from a selector
-	 * @param {String} selector - selector to that gets properties removed
-	 * @param {Array} properties - set of properties that get removed
+	 * @param {string} selector - selector to that gets properties removed
+	 * @param {string[]} properties - set of properties that get removed
 	 */
 	removeRule(selector, properties) {
 		let base = this.selectors[selector];
@@ -126,10 +131,16 @@ export default class Sheet {
 		this.active = false;
 	}
 
+	/**
+	 * Enables the Sheet (selectors get active)
+	 */
 	enable() {
 		Interface.enable(this);
 	}
 
+	/**
+	 * Disables the Sheet (selectors get inactive)
+	 */
 	disable() {
 		Interface.disable(this);
 	}
@@ -137,7 +148,7 @@ export default class Sheet {
 	/**
 	 * Runs a processor to modify your stylesheet
 	 * {Object} processor - a processor with a valid process() function
-	 * {Multiple} args - any arguments you need to pass to a processor
+	 * {strings[]} args - any arguments you need to pass to a processor
 	 */
 	process(processor, ...args) {
 		args.unshift(this.selectors);
@@ -182,10 +193,16 @@ export default class Sheet {
 		return CSS;
 	}
 
+	/**
+	 * Returns if the Sheet is active (not disabled)
+	 */
 	isActive() {
 		return this.active;
 	}
 
+	/**
+	 * Returns if the Sheet is registered (applied to DOM)
+	 */
 	isRegistered() {
 		return this.registered;
 	}

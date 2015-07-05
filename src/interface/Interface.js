@@ -12,14 +12,12 @@ export default {
 	 */
 	register(stylesheet) {
 			if (!stylesheet.isRegistered()) {
-				let id = stylesheet.id;
-
-
-				appliedSelectors.set(id, Util.cloneObject(stylesheet.selectors));
+				appliedSelectors.set(stylesheet.id, Util.cloneObject(stylesheet.selectors));
 
 				let style = document.createElement('style');
 				style.type = 'text/css';
-				style.id = idPrefix + id;
+				style.media = stylesheet.media;
+				style.id = idPrefix + stylesheet.id;
 
 				stylesheet.DOM = style;
 				stylesheet.registered = true;
@@ -113,7 +111,7 @@ export default {
 
 		/**
 		 * Detaches a stylesheet to the document
-		 * @param {Object} stylesheet - StyleSheet that gets the changes applied
+		 * @param {Sheet} stylesheet - StyleSheet that gets the changes applied
 		 */
 		detach(sheet) {
 			head.removeChild(sheet.DOM);
@@ -124,20 +122,21 @@ export default {
 			sheet.registered = false;
 		},
 
+		/**
+		 * Disables the Sheet by setting disabled=true
+		 * @param {Sheet} stylesheet - StyleSheet that gets disabled
+		 */
 		disable(sheet) {
 			sheet.sheet.disabled = true;
 			sheet.active = false;
 		},
 
+		/**
+		 * Enables the Sheet by setting disabled=false
+		 * @param {Sheet} stylesheet - StyleSheet that gets enabled
+		 */
 		enable(sheet) {
 			sheet.sheet.disabled = false;
 			sheet.active = false;
-		},
-
-		/**
-		 * Returns stylesheet count
-		 */
-		getStyleSheetCount() {
-			return appliedSelectors.size;
 		}
 }
