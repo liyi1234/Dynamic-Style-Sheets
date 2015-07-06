@@ -122,6 +122,9 @@ export function isPrefixedProperty(property) {
 	return property.indexOf("Webkit") == 0 ||  property.indexOf("Moz") == 0 || property.indexOf("ms") == 0;
 }
 
+/**
+ * Returns the index of a selector within a CSSrules object
+ */
 export function getCSSRuleIndex(cssRules, selector) {
 	let i;
 	let length = cssRules.length;
@@ -131,4 +134,12 @@ export function getCSSRuleIndex(cssRules, selector) {
 			return i;
 		}
 	}
+}
+
+/**
+ * Transform a String into param case
+ * @param {String} string - String that gets transformed to param case
+ */
+export function toParamCase(string) {
+	return (this.isPrefixedProperty(string) ? '-' : '') + paramCase(string);
 }
