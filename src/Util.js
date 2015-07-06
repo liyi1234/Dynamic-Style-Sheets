@@ -1,5 +1,6 @@
 import paramCase from 'param-case';
-import objectAssign from 'object-assign'
+import objectAssign from 'object-assign';
+
 export let Diff = {
 	CHANGED: 'change',
 	ADDED: 'add',
@@ -7,18 +8,10 @@ export let Diff = {
 }
 
 /**
- * Transform a String into param case
- * @param {String} string - String that gets transformed to param case
- */
-export function toParamCase(string) {
-	return (this.isPrefixedProperty(string) ? '-' : '') + paramCase(string);
-}
-
-/**
  * Mixes two maps and optionally overwrites existing values
  * @param {Object} base - A base map which might get overwritten
  * @param {Object} extend - A map which will extend the base map
- * @param {Boolean} overwrite - overwrite existing properties
+ * @param {boolean} overwrite - overwrite existing properties
  */
 export function extendObject(base, extend, overwrite = true) {
 	let extended;
@@ -50,20 +43,6 @@ export function cloneObject(obj, deep = true) {
 }
 
 /**
- * Returns a single CSS rule string out of Object pairs
- * @param {Object} map - Object with CSS rules
- */
-export function cssifyObject(obj) {
-	let rules = '';
-	let property;
-	for (property in obj) {
-		rules += this.toParamCase(property) + ':' + obj[property] + ';';
-	}
-	return rules;
-}
-
-
-/**
  * Diffs an object, applies changes and returns a Object of changes
  * @param {Object} base - basic map that gets overwritten
  * @param {Object} diff - map with new data
@@ -71,16 +50,20 @@ export function cssifyObject(obj) {
 export function diffObject(base, diff) {
 	let changes = new Map();
 	let property;
-	
+
 	for (property in base) {
-		//if still existing
 		if (diff.hasOwnProperty(property)) {
+			/*
+			 * Property still exists
+			 */
 			let newValue = diff[property];
-			//if value changed
 			if (newValue instanceof Object) {
 
 				let change = this.diffObject(base[property], newValue);
 
+				/*
+				 * At least one values changed
+				 */
 				if (change.size > 0) {
 					changes.set(property, this.Diff.CHANGED);
 					changes.set('_' + property, change);
@@ -92,10 +75,17 @@ export function diffObject(base, diff) {
 				}
 			}
 		} else {
+			/*
+			 * Value has been removed
+			 */
 			delete base[property];
 			changes.set(property, this.Diff.REMOVED);
 		}
 	}
+
+	/*
+	 * Add up all new properties
+	 */
 	for (property in diff) {
 		if (!base.hasOwnProperty(property)) {
 			let temp = diff[property];
@@ -112,8 +102,21 @@ export function diffObject(base, diff) {
 }
 
 /**
+ * Returns a single CSS rule string out of Object pairs
+ * @param {Object} map - Object with CSS rules
+ */
+export function cssifyObject(obj) {
+	let rules = '';
+	let property;
+	for (property in obj) {
+		rules += this.toParamCase(property) + ':' + obj[property] + ';';
+	}
+	return rules;
+}
+
+/**
  * Checks if a property is vendor prefixed
- * @param {String} property - Property that get's checked
+ * @param {string} property - Property that get's checked
  */
 export function isPrefixedProperty(property) {
 	return property.indexOf("Webkit") == 0 ||  property.indexOf("Moz") == 0 || property.indexOf("ms") == 0;

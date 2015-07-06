@@ -1,6 +1,6 @@
 {
 	"name": "dynamic-style-sheets",
-	"version": "0.0.9",
+	"version": "0.1.0",
 	"description": "dynamic interface to interact with style sheets",
 	"main": "src/index.js",
 	"files": [
@@ -24,7 +24,7 @@
 	"author": "Robin Frischmann",
 	"license": "MIT",
 	"dependencies": {
-		"dss-flexbox": "0.0.2",
+		"dss-flexbox": "0.0.6",
 		"dss-prefixer": "0.0.4",
 		"object-assign": "^3.0.0",
 		"param-case": "1.1.1"
