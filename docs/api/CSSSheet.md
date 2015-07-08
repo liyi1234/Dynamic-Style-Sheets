@@ -31,8 +31,8 @@ let sheet = new CSSSheet({
 * [detach](#detach)
 * [enable](#enable)
 * [disable](#disable)
-* [compile](#compile-selector)
-* [toCSS](#tocss-selector)
+* [compile](#compileselector)
+* [toCSS](#tocssselector)
 * [isActive](#isactive)
 * [isRegistered](#isregistered)
 
@@ -57,7 +57,7 @@ Disables your StyleSheet. Selectors won't match (better performance), but it rem
  
 # Other
 ### `compile([selector])`
-Generates valid CSS strings for each selector or if `selector` is set, for a single selector with the following pattern. `{selector : CSS, ...}`.
+Generates valid CSS strings for each selector or if `selector` is set, for a single selector with the following pattern. `{selector : CSS, ...}`
 
 ### `toCSS([selector])`
 Generates a single valid CSS string of your sheet or if `selector` is set of a single selector with the following pattern. `selector : {CSS} ...`
