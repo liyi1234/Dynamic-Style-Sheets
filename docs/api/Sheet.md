@@ -18,21 +18,17 @@ let sheet = new Sheet({
 
 # Methods
 * [process](#processprocessor-args)
- 
 * [add](#addselectors--overwrite--false)
 * [addSelector](#addselectorselector--overwrite--false)
 * [addRule](#addruleselector-property-value--overwrite--false)
- 
 * [remove](#removeselectors)
 * [removeSelector](#removeselectorselector)
 * [removeRule](#removeruleselector-rule)
 * [removeRules](#removerulesselector-rules)
 * [removeAll](#removeall)
- 
 * [modify](#modifyselector)
 * [modifySelector](#modifyselectorselector-rules)
 * [modifyRule](#modifyselector-property-value)
- 
 * [replace](#replaceselectors)
 * [replaceSelector](#replaceselector-rules)
 
