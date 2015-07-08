@@ -1,4 +1,4 @@
-![Dynamic Style Sheets](res/logo.png =200x200)
+<img src="https://github.com/dynamicstylesheets/Dynamic-Style-Sheets/blob/develop/res/logo.png" width="200">
 
 Dynamic Style Sheets (DSS) is an ES6 API that let's you create StyleSheets and work with them. Those ship with functionality to **add, remove, modify, replace, merge, compile** or **process selectors** and **rules**.
 Using javascript allows you to add **variables**, **functions/mixins** and a lot more. This gives you enorm powers in comparision to vanilla CSS. 
