@@ -1,37 +1,42 @@
 {
-	"name": "dynamic-style-sheets",
-	"version": "0.1.1",
-	"description": "dynamic interface to interact with style sheets",
-	"main": "src/index.js",
-	"files": [
-		"LICENSE",
-		"README.md",
-		"Research.md",
-		"src/"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/dynamicstylesheets/Dynamic-Style-Sheets"
-	},
-	"keywords": [
-		"dss",
-		"dynamic style sheets",
-		"stylesheet",
-		"css",
-		"styling",
-		"DOM"
-	],
-	"author": "Robin Frischmann",
-	"license": "MIT",
-	"dependencies": {
-		"dss-flexbox": "0.0.6",
-		"dss-prefixer": "0.0.4",
-		"object-assign": "^3.0.0",
-		"param-case": "1.1.1"
-	},
-	"browserify": {
-		"transform": [
-			"babelify"
-		]
-	}
+  "name": "dynamic-style-sheets",
+  "version": "0.1.2",
+  "description": "dynamic interface to work with style sheets",
+  "main": "src/index.js",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "Research.md",
+    "src/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dynamicstylesheets/Dynamic-Style-Sheets"
+  },
+  "keywords": [
+    "dss",
+    "dynamic style sheets",
+    "stylesheet",
+    "css",
+    "styling",
+		"style processor",
+		"preprocessor",
+		"postprocessor",
+		"inlinestyles",
+    "DOM"
+  ],
+  "author": "Robin Frischmann",
+  "license": "MIT",
+  "dependencies": {
+    "dss-flexbox": "0.0.6",
+    "dss-mixins": "0.0.3",
+    "dss-prefixer": "0.0.4",
+    "object-assign": "^3.0.0",
+    "param-case": "1.1.1"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  }
 }
