@@ -2,6 +2,7 @@ import Interface from './Interface';
 import * as Util from './Util';
 import Sheet from './Sheet';
 
+
 let counter = 0;
 /**
  * DynamicStyleSheet is a class to handle and modify StyleSheets

@@ -16,10 +16,9 @@ export default class Sheet {
 	/**
 	 * Adds a set of selectors to the sheet
 	 * @param {Object} selectors - set of selectors that get added
-	 * @param {Object} rules - key value map of style properties and values
 	 * @param {boolean} overwrite - overwrite existing properties
 	 */
-	add(selectors, overwrite = true) {
+	add(selectors, overwrite = false) {
 		let selector;
 		for (selector in selectors) {
 			this.addSelector(selector, selectors[selector], overwrite);
@@ -32,7 +31,7 @@ export default class Sheet {
 	 * @param {Object} rules - key value map of style properties and values
 	 * @param {boolean} overwrite - overwrite existing properties
 	 */
-	addSelector(selector, rules, overwrite = true) {
+	addSelector(selector, rules, overwrite = false) {
 		if (this.selectors.hasOwnProperty(selector)) {
 			let base = this.selectors[selector];
 			let extended = Util.extendObject(base, rules, overwrite);
@@ -49,7 +48,7 @@ export default class Sheet {
 	 * @param {number} value -  value that gets added
 	 * @param {boolean} overwrite - overwrite existing properties
 	 */
-	addRule(selector, property, value, overwrite = true) {
+	addRule(selector, property, value, overwrite = false) {
 		if (this.selectors.hasOwnProperty(selector)) {
 			let current = this.selectors[selector];
 
@@ -64,13 +63,70 @@ export default class Sheet {
 	}
 
 	/**
+	 * Removes a set of selectors
+	 * @param {Array} selectors - an array of selectors
+	 */
+	remove(selectors) {
+			let i;
+			let length = selectors.length;
+
+			for (i = 0; i < length; ++i) {
+				delete this.selectors[selectors[i]];
+			}
+		}
+		/**
+		 * Removes a selector
+		 * @param {string} selector - selector that gets deleted
+		 */
+	removeSelector(selector) {
+		delete this.selectors[selector];
+	}
+
+	/**
+	 * Removes a set of properties from a selector
+	 * @param {string} selector - selector to that gets properties removed
+	 * @param {string} property - property that gets removed
+	 */
+	removeRule(selector, property) {
+			delete this.selectors[selector][property];
+		}
+		/**
+		 * Removes a set of properties from a selector
+		 * @param {string} selector - selector to that gets properties removed
+		 * @param {string[]} properties - set of properties that get removed
+		 */
+	removeRules(selector, properties) {
+		let base = this.selectors[selector];
+
+		if (properties instanceof Array == false) {
+			properties = [properties];
+		}
+
+		let i;
+		let length = properties.length;
+		for (i = 0; i < length; ++i) {
+			let current = properties[i];
+
+			if (base.hasOwnProperty(current)) {
+				delete base[current];
+			}
+		}
+	}
+
+	/**
+	 * Removes all selectors
+	 */
+	removeAll() {
+		this.selectors = {};
+	}
+
+	/**
 	 * Modifies a set of selectors
 	 * @param {String} selectors - selector that gets styles added
 	 */
 	modify(selectors) {
 		this.add(selectors, true);
 	}
-
 
 	/**
 	 * Modifies selectors style rules
@@ -112,56 +168,6 @@ export default class Sheet {
 	}
 
 	/**
-	 * Removes a set of selectors
-	 * @param {Array} selectors - an array of selectors
-	 */
-	remove(selectors) {
-			let i;
-			let length = selectors.length;
-
-			for (i = 0; i < length; ++i) {
-				delete this.selectors[selectors[i]];
-			}
-		}
-		/**
-		 * Removes a selector
-		 * @param {string} selector - selector that gets deleted
-		 */
-	removeSelector(selector) {
-		delete this.selectors[selector];
-	}
-
-	/**
-	 * Removes a set of properties from a selector
-	 * @param {string} selector - selector to that gets properties removed
-	 * @param {string|string[]} properties - set of properties that get removed
-	 */
-	removeRule(selector, properties) {
-		let base = this.selectors[selector];
-
-		if (properties instanceof Array == false) {
-			properties = [properties];
-		}
-
-		let i;
-		let length = properties.length;
-		for (i = 0; i < length; ++i) {
-			let current = properties[i];
-
-			if (base.hasOwnProperty(current)) {
-				delete base[current];
-			}
-		}
-	}
-
-	/**
-	 * Removes all selectors
-	 */
-	removeAll() {
-		this.selectors = {};
-	}
-
-	/**
 	 * Runs a processor to modify your stylesheet
 	 * {Object} processor - a processor with a valid process() function
 	 * {strings[]} args - any arguments you need to pass to a processor
@@ -171,5 +177,12 @@ export default class Sheet {
 		if (processor.hasOwnProperty('process') && processor.process instanceof Function) {
 			processor.process(...args);
 		}
+	}
+	
+	/**
+	* Returns all selectors
+	*/
+	getSelectors(){
+		return this.selectors;
 	}
 }
