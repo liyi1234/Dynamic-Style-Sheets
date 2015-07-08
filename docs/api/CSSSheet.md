@@ -3,7 +3,7 @@ CSSSheet is a more advanced extension of [Sheet](Sheet.md) and offers a nice set
  
 It diffs all your styles within JavaScript to achieve as little as possible DOM actions since we know those are highly inperformant. 
 
-## `constructor(styles [, media = '', id = generated])`
+## constructor(styles [, media = '', id = generated])
 Takes in a set of selectors just like a normal Sheet, but those need to be valid CSS selectors this time.    
 You can also apply a `media` string to add a special media-behavoir. This is quite useful for `media-queries`.   
 Also consider adding an id if you want to access your `<style>`-tag later. Not set it gets an generated id applied.
@@ -30,42 +30,40 @@ let sheet = new CSSSheet({
 * [update](#update)
 * [detach](#detach)
 * [enable](#enable)
-* [disable](#disable)    
-
-
+* [disable](#disable)
 * [compile](#compile-selector)
 * [toCSS](#tocss-selector)
 * [isActive](#isactive)
 * [isRegistered](#isregistered)
 
 # DOM Interaction
-## `apply()`
+### `apply()`
 Applies your Sheet to the document. 
 > You can only call this **once!** use update afterwards.
 
-## `update()`
+### `update()`
 Updates your applied styles by diffing changes to achieve as much performance as possible. 
 > **Note**: Still avoid calling this too often and better do every modification before (even before `apply`) if possible.
 
-## `detach()`
+### `detach()`
 Detaches your sheet from the document. This completely removes your StyleSheet from the DOM to improve performance.
 > **Warning**: Only use this if you are sure to not need it later again. If so check `disable`.
 
-## `enable()`
+### `enable()`
 (Re-)Actives your StyleSheet to activate selector matching.
 
-## `disable()`
+### `disable()`
 Disables your StyleSheet. Selectors won't match (better performance), but it remains applied to your document. Use `enable` to reactivate.
  
 # Other
-## `compile([selector])`
+### `compile([selector])`
 Generates valid CSS strings for each selector or if `selector` is set, for a single selector with the following pattern. `{selector : CSS, ...}`.
 
-## `toCSS([selector])`
+### `toCSS([selector])`
 Generates a single valid CSS string of your sheet or if `selector` is set of a single selector with the following pattern. `selector : {CSS} ...`
 
-## `isActive()`
+### `isActive()`
 Checks if your Sheet actually is **not** disabled.
 
-## `isRegistered()`
+### `isRegistered()`
 Checks if your Sheet has already been applied to your document.
