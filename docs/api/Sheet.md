@@ -17,81 +17,78 @@ let sheet = new Sheet({
 ```
 
 # Methods
-* [process](#processprocessors-args)
+* [process](#processprocessor-args)
 
-
-* [add](#addselectors-overwrite-false)
-* [addSelector](#addselectorselectoroverwrite-false)
-* [addRule](#addruleselectorpropertyvalueoverwrite-false)
-
+* [add](#addselectors--overwrite--false)
+* [addSelector](#addselectorselector--overwrite--false)
+* [addRule](#addruleselector-property-value--overwrite--false)
 
 * [remove](#removeselectors)
 * [removeSelector](#removeselectorselector)
-* [removeRule](#removeruleselectorrule)
-* [removeRules](#removerulesselectorrules)
+* [removeRule](#removeruleselector-rule)
+* [removeRules](#removerulesselector-rules)
 * [removeAll](#removeall)
 
-
 * [modify](#modifyselector)
-* [modifySelector](#modifyselectorselectorrules)
-* [modifyRule](#modifyselectorpropertyvalue)
+* [modifySelector](#modifyselectorselector-rules)
+* [modifyRule](#modifyselector-property-value)
 
 * [replace](#replaceselectors)
-* [replaceSelector](#replaceselectorrules)
+* [replaceSelector](#replaceselector-rules)
 
 # `process(processor, [...args])`
 Runs a `processor` with an array of `args`. 
 > First argument is **always** Sheet `selectors`.
 
 # add
-## `add(selectors [, overwrite = false])`
+### `add(selectors [, overwrite = false])`
 Adds a map of `selectors` and overwrites existing if `overwrite`.
 
-## `addSelector(selector [, overwrite = false])`
+### `addSelector(selector [, overwrite = false])`
 Adds a single`selector` and overwrites existing properties if `overwrite`.
 
-## `addRule(selector, property, value [, overwrite = false])`
+### `addRule(selector, property, value [, overwrite = false])`
 Adds a `property`-`value` pair to a `selector` and overwrites existing value if `overwrite`.
 
-## `addRule(selector, rules [, overwrite = false])`
+### `addRule(selector, rules [, overwrite = false])`
 Adds an aray of `rules` pair to a `selector` and overwrites existing rules if `overwrite`.
 
 # remove
-## `.remove(selectors)`
+### `remove(selectors)`
 Removes an array of `selectors` by name.
 
-## `.removeSelector(selector)`
+### `removeSelector(selector)`
 Removes a single `selector`.
 
-## `.removeRule(selector, rule)`
+### `.removeRule(selector, rule)`
 Removes a single `rule` by name from a `selector`.
 
-## `.removeRules(selector, rules)`
+### `removeRules(selector, rules)`
 Removes an array of `rules` by name from a `selector`.
 
-## `.removeAll()`
+### `removeAll()`
 Removes all selectors.
 
 # modify
-## `.modify(selector)`
+### `modify(selector)`
 Modifies a map of `selectors`.
 
 > Possible duplicate: `add(selectors, true)`
 
-## `.modifySelector(selector, rules)`
+### `modifySelector(selector, rules)`
 Modifies a map of `rules` of a `selector`.
 
 > Possible dublicate: `addSelector(selector, rules, true)`
 
-## `.modifyRule(selector, property, value)`
+### `modifyRule(selector, property, value)`
 Modifies a `selectors` `property` with a new `value`.
 
 > Possible dublicate: `addRule(selector, property, value, true)`
 
 # replace
-## `.replace(selectors)`
+### `replace(selectors)`
 Replaces a map of `selectors`.
 
-## `.replaceSelector(selector, rules)`
+### `replaceSelector(selector, rules)`
 Replaces a map of `rules` of a `selector`.
 
