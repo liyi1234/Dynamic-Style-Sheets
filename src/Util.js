@@ -40,6 +40,7 @@ export function cloneObject(obj, deep = true) {
 			clone[i] = temp;
 		}
 	}
+	return clone;
 }
 
 /**
@@ -126,14 +127,7 @@ export function isPrefixedProperty(property) {
  * Returns the index of a selector within a CSSrules object
  */
 export function getCSSRuleIndex(cssRules, selector) {
-	let i;
-	let length = cssRules.length;
-
-	for (i = 0; i < length; ++i) {
-		if (cssRules[i].selectorText == selector) {
-			return i;
-		}
-	}
+	return cssRules.findIndex(rule => rule.selectorText == selector);
 }
 
 /**
