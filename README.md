@@ -19,15 +19,6 @@ Because they're build to be dynamic and yet still remain static. ..Huh? You can 
 * extendable
 * compatible with both CSS and inline styles
 
-# Roadmap
-
-- [x] **API Reference**
-- [ ] [Performance Improvement > Research](docs/Research.md) (*Check for further information*)
-- [ ] Documentation
-- [ ] Core Processors & Tools
-
-- [ ] Publishing  :tada:
-
 # [Sheet](docs/api/Sheet.md) vs. [CSSSheet](docs/api/CSSSheet.md)
 There are two options to use DSS. Either you take `Sheet` which is the lightweight variant without any DOM interaction ability or you go with `CSSSheet` which offers a nice set of DOM interaction methods to apply your CSS to your document.
 
@@ -56,7 +47,8 @@ Yet there are some core processors which we provide out of the box.
 |------|-----| --------| ------------|
 |[DSS-Prefixer](https://github.com/dynamicstylesheets/DSS-Prefixer)|`dss-prefixer`| 0.0.4 | Autoprefixer for Dynamic Style Sheets |
 |[DSS-Flexbox](https://github.com/dynamicstylesheets/DSS-Flexbox)|`dss-flexbox`|0.0.6 | Flexbox support for all specifications |
-|[DSS-Mixins](https://github.com/dynamicstylesheets/DSS-Mixins)|`dss-mixins`|0.0.3 | Custom property support 
+|[DSS-Mixins](https://github.com/dynamicstylesheets/DSS-Mixins)|`dss-mixins`|0.0.4 | Custom property support |
+|[DSS-Units](https://github.com/dynamicstylesheets/DSS-Units)|`dss-units`|0.0.1 | Adds units to unit-specific values
 
 # Docs 
 * [Research](docs/Research.md)
@@ -65,7 +57,7 @@ Yet there are some core processors which we provide out of the box.
 ### Guides
 * Getting Started 
 * [HowTo]: Create your own processor!
-* [HowTo]: Build on top of DSS]
+* [HowTo]: Build on top of DSS
 	    
 						
 ### API 
