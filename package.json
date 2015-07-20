@@ -30,7 +30,7 @@
   "dependencies": {
     "dss-flexbox": "0.0.6",
     "dss-mixins": "0.0.4",
-    "dss-units" : "0.0.1",
+    "dss-units" : "0.0.2",
     "dss-prefixer": "0.0.4",
     "object-assign": "^3.0.0",
     "param-case": "1.1.1"
