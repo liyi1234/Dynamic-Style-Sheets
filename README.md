@@ -47,8 +47,8 @@ Yet there are some core processors which we provide out of the box.
 |------|-----| --------| ------------|
 |[DSS-Prefixer](https://github.com/dynamicstylesheets/DSS-Prefixer)|`dss-prefixer`| 0.0.4 | Autoprefixer for Dynamic Style Sheets |
 |[DSS-Flexbox](https://github.com/dynamicstylesheets/DSS-Flexbox)|`dss-flexbox`|0.0.6 | Flexbox support for all specifications |
-|[DSS-Mixins](https://github.com/dynamicstylesheets/DSS-Mixins)|`dss-mixins`|0.0.4 | Custom property support |
-|[DSS-Units](https://github.com/dynamicstylesheets/DSS-Units)|`dss-units`|0.0.2 | Adds units to unit-specific values
+|[DSS-Mixins](https://github.com/dynamicstylesheets/DSS-Mixins)|`dss-mixins`|0.0.5 | Custom property support |
+|[DSS-Units](https://github.com/dynamicstylesheets/DSS-Units)|`dss-units`|0.0.3 | Adds units to unit-specific values
 
 # Docs 
 * [Research](docs/Research.md)

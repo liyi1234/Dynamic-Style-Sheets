@@ -1,6 +1,6 @@
 {
   "name": "dynamic-style-sheets",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "dynamic interface to work with style sheets",
   "main": "src/index.js",
   "files": [
@@ -29,8 +29,8 @@
   "license": "MIT",
   "dependencies": {
     "dss-flexbox": "0.0.6",
-    "dss-mixins": "0.0.4",
-    "dss-units" : "0.0.2",
+    "dss-mixins": "0.0.5",
+    "dss-units" : "0.0.3",
     "dss-prefixer": "0.0.4",
     "object-assign": "^3.0.0",
     "param-case": "1.1.1"
