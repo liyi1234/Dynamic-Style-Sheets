@@ -1,6 +1,6 @@
 {
   "name": "dynamic-style-sheets",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "dynamic interface to work with style sheets",
   "main": "src/index.js",
   "files": [

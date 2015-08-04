@@ -168,21 +168,32 @@ export default class Sheet {
 	}
 
 	/**
-	 * Runs a processor to modify your stylesheet
-	 * {Object} processor - a processor with a valid process() function
-	 * {strings[]} args - any arguments you need to pass to a processor
+	 * Runs processor(s) to modify your stylesheet
+	 * {Object} processor(s) - processor(s) with a valid process() function
+	 * {any[]} args - any arguments you need to pass to a processor
 	 */
-	process(processor, ...args) {
+	process(processors, ...args) {
+		var checkProcessor = function (processor, ...args) {
+			if (processor.hasOwnProperty('process') && processor.process instanceof Function) {
+				processor.process(...args);
+			}
+		}
+
 		args.unshift(this.selectors);
-		if (processor.hasOwnProperty('process') && processor.process instanceof Function) {
-			processor.process(...args);
+
+		if (processors instanceof Array === false) {
+			checkProcessor(processors, ...args);
+		} else {
+			processors.forEach(item => {
+				checkProcessor(item, ...args);
+			});
 		}
 	}
-	
+
 	/**
-	* Returns all selectors
-	*/
-	getSelectors(){
+	 * Returns all selectors
+	 */
+	getSelectors() {
 		return this.selectors;
 	}
 }
